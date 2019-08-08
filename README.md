@@ -42,12 +42,12 @@ or if you want to evaluate on multi-gpus, you can also do this:
 * As for the hyper-parameters, you may change them in the configuration file `configs/configurations.py`.
 
 
-### Outreach***********
+### ××Outreach××
 
 We re-trained the model and got a mIoU of 78.457% after ~60000 iters(backbone res101, evaluated with single scale and no flip), but we got an unbelievable mIoU of 78.398 after ~60000 iters when using res50 as backbone (evaluated with single scale and no flip).
 
-我们使用了别人(coin)实现的pytorch版本的deeplabv3+(https://github.com/CoinCheung/DeepLab-v3-plus-cityscapes)在cityscape上进行训练，结果和coin几乎一致. 但是我们将代码的backbone换成了res50，其余所有不变，精度几乎达到了res101的精度，单尺度evl集达到了惊人的78.398(×××只比deeplabv3+使用Res101的backbone低了0.06%×××，比同样使用res50 backbone的PSPNet精度高了1个点 https://github.com/hszhao/semseg).
-更让人意外的是deeplabv3+原作tensorflow(https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/model_zoo.md)中使用xception65 backbone的结果也只有78.79%，xception71为80.31% 
+我们使用了别人(coin)实现的pytorch版本的deeplabv3+(https://github.com/CoinCheung/DeepLab-v3-plus-cityscapes)  在cityscape上进行训练，结果和coin几乎一致. 但是我们将代码的backbone换成了res50，其余所有不变，精度几乎达到了res101的精度，单尺度evl集达到了惊人的78.398(×××只比deeplabv3+使用Res101的backbone低了0.06%×××，比同样使用res50 backbone的PSPNet精度高了1个点 https://github.com/hszhao/semseg).
+更让人意外的是deeplabv3+原作tensorflow (https://github.com/tensorflow/models/blob/master/research/deeplab/g3doc/model_zoo.md) 中使用xception65 backbone的结果也只有78.79%，xception71为80.31% 
 
 所以是代码的原因还是说deeplabv3+在cityscape上其实backbone使用res50的就可以达到接近于res101、xception65 的精度？？？？？
 
