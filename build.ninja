@@ -1,0 +1,28 @@
+ninja_required_version = 1.3
+cxx = c++
+nvcc = /apps/software/CUDA/9.0.176/bin/nvcc
+
+cflags = -DTORCH_EXTENSION_NAME=inplace_abn -DTORCH_API_INCLUDE_EXTENSION_H -isystem /fast/users/a1746546/envs/myenv/lib/python3.7/site-packages/torch/include -isystem /fast/users/a1746546/envs/myenv/lib/python3.7/site-packages/torch/include/torch/csrc/api/include -isystem /fast/users/a1746546/envs/myenv/lib/python3.7/site-packages/torch/include/TH -isystem /fast/users/a1746546/envs/myenv/lib/python3.7/site-packages/torch/include/THC -isystem /apps/software/CUDA/9.0.176/include -isystem /fast/users/a1746546/envs/myenv/include/python3.7m -D_GLIBCXX_USE_CXX11_ABI=0 -fPIC -std=c++11 -O3
+cuda_flags = -DTORCH_EXTENSION_NAME=inplace_abn -DTORCH_API_INCLUDE_EXTENSION_H -isystem /fast/users/a1746546/envs/myenv/lib/python3.7/site-packages/torch/include -isystem /fast/users/a1746546/envs/myenv/lib/python3.7/site-packages/torch/include/torch/csrc/api/include -isystem /fast/users/a1746546/envs/myenv/lib/python3.7/site-packages/torch/include/TH -isystem /fast/users/a1746546/envs/myenv/lib/python3.7/site-packages/torch/include/THC -isystem /apps/software/CUDA/9.0.176/include -isystem /fast/users/a1746546/envs/myenv/include/python3.7m -D_GLIBCXX_USE_CXX11_ABI=0 -D__CUDA_NO_HALF_OPERATORS__ -D__CUDA_NO_HALF_CONVERSIONS__ -D__CUDA_NO_HALF2_OPERATORS__ --compiler-options '-fPIC' --expt-extended-lambda -std=c++11
+ldflags = -shared -L/apps/software/CUDA/9.0.176/lib64 -lcudart
+
+rule compile
+  command = $cxx -MMD -MF $out.d $cflags -c $in -o $out
+  depfile = $out.d
+  deps = gcc
+
+rule cuda_compile
+  command = $nvcc $cuda_flags -c $in -o $out
+
+rule link
+  command = $cxx $in $ldflags -o $out
+
+build inplace_abn.o: compile /fast/users/a1746546/code/DeepLab-v3-plus-cityscapes-Res50/modules/src/inplace_abn.cpp
+build inplace_abn_cpu.o: compile /fast/users/a1746546/code/DeepLab-v3-plus-cityscapes-Res50/modules/src/inplace_abn_cpu.cpp
+build inplace_abn_cuda.cuda.o: cuda_compile /fast/users/a1746546/code/DeepLab-v3-plus-cityscapes-Res50/modules/src/inplace_abn_cuda.cu
+build inplace_abn_cuda_half.cuda.o: cuda_compile /fast/users/a1746546/code/DeepLab-v3-plus-cityscapes-Res50/modules/src/inplace_abn_cuda_half.cu
+
+build inplace_abn.so: link inplace_abn.o inplace_abn_cpu.o inplace_abn_cuda.cuda.o inplace_abn_cuda_half.cuda.o
+
+default inplace_abn.so
+
