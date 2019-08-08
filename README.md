@@ -51,6 +51,6 @@ We re-trained the model and got a mIoU of 78.457% after ~60000 iters(backbone re
 
 所以是代码的原因还是说deeplabv3+在cityscape上其实backbone使用res50的就可以达到接近于res101、xception65 的精度？？？？？
 
-相关记录见slurm-11311.out文件(40000次迭代版本)和slurm-11413.out(60000次迭代版本)
+相关记录见slurm-11413.out(60000次迭代版本)
 
 
